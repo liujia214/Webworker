@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script>
+
+        document.addEventListener('DOMContentLoaded',function(){
+
+            var save = document.getElementById('save');
+            save.addEventListener('click',function(event){
+                var key = document.querySelector('input[name="key"]').value;
+                var value = document.querySelector('input[name="value"]').value;
+
+                event.preventDefault();
+                console.log(key);
+                console.log(value);
+                if(key != null){
+                    localStorage.setItem(key,value);
+                }
+            });
+
+            var search = document.getElementById('search');
+            search.addEventListener('click',function(event){
+                var searchkey = document.querySelector('input[name="searchkey"]').value;
+
+                var span = document.querySelector('span');
+                event.preventDefault();
+                span.innerHTML = localStorage.getItem(searchkey);
+
+            });
+
+            var allkeys = document.getElementById('list_all_keys');
+            allkeys.addEventListener('click',function(){
+               var keys = [];
+                if(localStorage.length > 0){
+                    for(var i = 0;i<localStorage.length;i++){
+                        keys.push(localStorage.key(i));
+                    }
+                    console.log(keys);
+                    var ul = document.getElementById('all_keys');
+                    for(var i = 0;i<keys.length;i++){
+                        var list = document.createElement('li');
+                        list.innerHTML = keys[i] + ':' + localStorage.getItem(keys[i]);
+                        ul.appendChild(list);
+                    }
+                }
+
+            });
+
+            var del = document.getElementById('delete_all_keys');
+            del.addEventListener('click',function(){
+                localStorage.clear();
+            })
+        })
+
+    </script>
+</head>
+<body>
+    <section>
+        <header>
+            <h1></h1>
+        </header>
+        <div>
+            <form>
+                <input type="text" name="key">
+                <input type="text" name="value">
+                <button id="save">Save</button>
+            </form>
+        </div>
+    </section>
+    <section>
+        <header>
+            <h1>Access the value of a key</h1>
+        </header>
+        <div>
+            <form>
+                <input type="text" name="searchkey"/>
+                <button id="search">Get Value</button>
+            </form>
+            <span></span>
+        </div>
+    </section>
+    <section>
+        <header></header>
+        <button id="list_all_keys">List all keys
+        </button>
+        <button id="delete_all_keys">Delete all keys
+        </button>
+        <ul id="all_keys">
+
+        </ul>
+    </section>
+</body>
+</html>

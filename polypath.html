@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style type="text/css">
+        html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
+    </style>
+    <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?v=3.exp">
+    </script>
+    <script type="text/javascript">
+
+        function loadByPosition(){
+            navigator.geolocation.getCurrentPosition(function(position){
+                initialize(position.coords.latitude,position.coords.longitude);
+            },function(err){
+                console.log('could not get the position object..',err);
+            },{
+                //options object --> enableHighAccuracy, timeout ,maximumAge
+            });
+
+
+        }
+
+        function initialize(lati,long) {
+            var mapOptions = {
+                center: { lat: lati, lng: long},
+                zoom: 20
+            };
+            var myLatlng = new google.maps.LatLng(lati,long);
+            var map = new google.maps.Map(document.getElementById('map-canvas'),
+                    mapOptions);
+
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                title:'First position',
+                map:map
+            });
+
+            var infowindow = new google.maps.InfoWindow({
+                content:'current position: [' + lati + ',' + long + ']'
+            });
+
+            google.maps.event.addListener(marker,'click',function(){
+               infowindow.open(map,marker);
+            });
+
+            var polyOptions = {
+                strokeColor:'#000000',
+                strokeColor:1.0,
+                strokeWeight:3
+            };
+            var poly = new google.maps.Polyline(polyOptions);
+            poly.setMap(map);
+
+
+
+            navigator.geolocation.watchPosition(function(position){
+                var path = poly.getPath();
+                console.log(position.coords.latitude," ",position.coords.longitude);
+                var newpostion = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+                path.push(newpostion);
+                console.log(path);
+                marker = new google.maps.Marker({
+                   position: newpostion,
+                    title:'#' + path.getLength(),
+                    map:map
+                });
+            },function(){
+                console.log('something wrong');
+            });
+        }
+        google.maps.event.addDomListener(window, 'load', loadByPosition);
+
+
+    </script>
+</head>
+<body>
+<div id="map-canvas"></div>
+</body>
+</html>

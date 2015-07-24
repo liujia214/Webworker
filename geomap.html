@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style type="text/css">
+        html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
+    </style>
+    <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?v=3.exp">
+    </script>
+    <script type="text/javascript">
+
+        function loadByPosition(){
+            navigator.geolocation.getCurrentPosition(function(position){
+                //console.log(position);
+                //console.log(position.coords.latitude);
+                //console.log(position.coords.longitude);
+                initialize(position.coords.latitude,position.coords.longitude);
+            },function(err){
+                console.log('could not get the position object..',err);
+            },{
+                //options object --> enableHighAccuracy, timeout ,maximumAge
+            });
+        }
+
+        function initialize(lati,long) {
+            var mapOptions = {
+                //center: { lat: -34.397, lng: 150.644},
+                center: { lat: lati, lng: long},
+                zoom: 14
+            };
+            var myLatlng = new google.maps.LatLng(lati,long);
+            var map = new google.maps.Map(document.getElementById('map-canvas'),
+                    mapOptions);
+
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                map: map,
+                title: 'Hello World!'
+            });
+        }
+        google.maps.event.addDomListener(window, 'load', loadByPosition);
+
+
+    </script>
+</head>
+<body>
+<div id="map-canvas"></div>
+</body>
+</html>
