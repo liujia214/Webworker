@@ -60,10 +60,16 @@
                 var newpostion = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
                 path.push(newpostion);
                 console.log(path);
-                marker = new google.maps.Marker({
+                var marker = new google.maps.Marker({
                    position: newpostion,
                     title:'#' + path.getLength(),
                     map:map
+                });
+                var infowindow = new google.maps.InfoWindow({
+                    content:'current position: [' + position.coords.latitude + ',' + position.coords.longitude + ']'
+                });
+                google.maps.event.addListener(marker,'click',function(){
+                    infowindow.open(map,marker);
                 });
             },function(){
                 console.log('something wrong');
