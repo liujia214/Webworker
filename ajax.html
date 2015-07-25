@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script>
+        document.addEventListener('DOMContentLoaded',function(){
+            var search = document.querySelector('input');
+            search.addEventListener('keydown',function(e){
+                if(e.keyCode === 13 && search.value){
+                    if(window.Worker){
+                        var webworker = new Worker('ajaxwebworker.js');
+                        webworker.onmessage = function(event){
+                            createList(event.data.items);
+                        };
+                        webworker.postMessage(search.value);
+                    }
+                }
+            });
+
+            function createList(att){
+                var ul = document.getElementById('list');
+                ul.innerHTML = '';
+                if(!Array.isArray(att)){
+                    att = Array.prototype.slice.call(att);
+                }
+                att.forEach(function(repo){
+
+                    var li = createElement('li',ul,'',repo.name);
+                });
+            }
+
+            function createElement(element,parent,classname,innerHTML,custom){
+                if(element) var ele = document.createElement(element);
+                if(parent) parent.appendChild(ele);
+                if(classname) ele.className = classname;
+                if(innerHTML) ele.innerHTML = innerHTML;
+                if(typeof custom != 'undefined'){
+                    for(var prop in custom){
+                        ele.setAttribute(prop,custom[prop]);
+                    }
+                }
+            }
+
+        })
+    </script>
+</head>
+<body>
+    <input type="search">
+    <ul id="list"></ul>
+</body>
+</html>
