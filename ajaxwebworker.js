@@ -1,8 +1,8 @@
 /**
  * Created by allenbklj on 7/25/15.
  */
-var array = ['nodejs','angularjs','mongodb'];
-var index = Math.floor(Math.random() * array.length);
+//var array = ['nodejs','angularjs','mongodb'];
+//var index = Math.floor(Math.random() * array.length);
 var id;
 
 self.onmessage = function(e){
